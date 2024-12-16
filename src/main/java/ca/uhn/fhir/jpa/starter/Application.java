@@ -25,6 +25,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Conditional;
 import org.springframework.context.annotation.Import;
 
+import java.io.IOException;
+
 @ServletComponentScan(basePackageClasses = {RestfulServer.class})
 @SpringBootApplication(exclude = {ElasticsearchRestClientAutoConfiguration.class, ThymeleafAutoConfiguration.class})
 @Import({
@@ -47,6 +49,21 @@ public class Application extends SpringBootServletInitializer {
 
 		// Server is now accessible at eg. http://localhost:8080/fhir/metadata
 		// UI is now accessible at http://localhost:8080/
+
+		try {
+			SubscriptionHandler handler = new SubscriptionHandler();
+			String filePath = "resources.xml";
+
+			// Save resources to XML
+			handler.saveResourcesToXml(filePath);
+			System.out.println("Resources saved to XML.");
+
+			// Load resources from XML
+			handler.loadResourcesFromXml(filePath);
+			System.out.println("Resources loaded from XML.");
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 
 
