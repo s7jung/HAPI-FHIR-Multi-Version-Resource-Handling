@@ -10,6 +10,15 @@ from [FHIR R4B](https://hapifhir.io/hapi-fhir/docs/getting_started/r4b.html):
 
 ## some findings 
 
-1. Operations like `subscriptionTopic.addContained(r4Patient)` are not supported due to compatibility issues.
-2. There is no `VersionConvertorFactory_40_43` implementation, making direct conversion between R4 (40) and R4B (43) unavailable.
+1. Operations like `subscriptionTopic.addContained(r4Patient)` are not supported due to compatibility issues. However, something like the following works:
+```
+String patientXml = r4Parser.encodeResourceToString(r4Patient);
+
+subscriptionTopic.addExtension("http://hl7.org/fhir/StructureDefinition/embedded-patient",
+			new org.hl7.fhir.r4b.model.StringType(patientXml)); 
+```
+This allows encapsulating R4 Data (Patient in this case) inside the SubscriptionTopic without violating FHIR’s data model. The idea is that SubscriptionTopic might be used in contexts where Patient resource is included as part of the subscription's metadata, so embedding it as an extension makes it possible to bundle both the SubscriptionTopic and the Patient in one resource.
+Note: the url is a placeholder, it is a unique identifier for the extension but it does not point to anything in this example 
+
+3. There is no `VersionConvertorFactory_40_43` implementation. Direct conversion between R4 (40) and R4B (43) is unavailable.
 
