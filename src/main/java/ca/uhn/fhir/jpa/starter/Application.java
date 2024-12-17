@@ -7,6 +7,7 @@ import ca.uhn.fhir.jpa.starter.cdshooks.StarterCdsHooksConfig;
 import ca.uhn.fhir.jpa.starter.cr.StarterCrDstu3Config;
 import ca.uhn.fhir.jpa.starter.cr.StarterCrR4Config;
 import ca.uhn.fhir.jpa.starter.mdm.MdmConfig;
+import ca.uhn.fhir.jpa.starter.util.ResourceBundleHandler;
 import ca.uhn.fhir.jpa.subscription.channel.config.SubscriptionChannelConfig;
 import ca.uhn.fhir.jpa.subscription.match.config.SubscriptionProcessorConfig;
 import ca.uhn.fhir.jpa.subscription.match.config.WebsocketDispatcherConfig;
@@ -26,6 +27,9 @@ import org.springframework.context.annotation.Conditional;
 import org.springframework.context.annotation.Import;
 
 import java.io.IOException;
+
+import static ca.uhn.fhir.jpa.starter.util.SubscriptionWithPatientExtensionHandler.createR4BSubscriptionWithPatient;
+import static ca.uhn.fhir.jpa.starter.util.SubscriptionWithPatientExtensionHandler.loadAndParseXML;
 
 @ServletComponentScan(basePackageClasses = {RestfulServer.class})
 @SpringBootApplication(exclude = {ElasticsearchRestClientAutoConfiguration.class, ThymeleafAutoConfiguration.class})
@@ -50,8 +54,9 @@ public class Application extends SpringBootServletInitializer {
 		// Server is now accessible at eg. http://localhost:8080/fhir/metadata
 		// UI is now accessible at http://localhost:8080/
 
+		/* 1. ResourceBundleHandler
 		try {
-			SubscriptionHandler handler = new SubscriptionHandler();
+			ResourceBundleHandler handler = new ResourceBundleHandler();
 			String filePath = "resources.xml";
 
 			// Save resources to XML
@@ -64,6 +69,16 @@ public class Application extends SpringBootServletInitializer {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+		*/
+
+//	/*  2. SubscriptionWithPatientHandler
+		try {
+			createR4BSubscriptionWithPatient();
+			loadAndParseXML();
+		} catch (IOException e) {
+			System.out.println("Error: " + e.getMessage());
+		}
+//	 */
 	}
 
 
@@ -81,5 +96,4 @@ public class Application extends SpringBootServletInitializer {
 
 		return servletRegistrationBean;
 	}
-
 }

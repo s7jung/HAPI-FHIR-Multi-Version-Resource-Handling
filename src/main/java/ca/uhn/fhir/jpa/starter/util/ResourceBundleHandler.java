@@ -1,4 +1,4 @@
-package ca.uhn.fhir.jpa.starter;
+package ca.uhn.fhir.jpa.starter.util;
 
 import org.hl7.fhir.r4.model.Patient;
 import org.hl7.fhir.r4b.model.SubscriptionTopic;
@@ -9,7 +9,11 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 
-public class SubscriptionHandler {
+/*
+This approach uses a container tag <Resource> to store both Patient and SubscriptionTopic in
+one xml file. From the generated xml, each resource is extracted and parsed separately.
+*/
+public class ResourceBundleHandler {
 
 	private static final FhirContext R4_CONTEXT = FhirContext.forR4();
 	private static final FhirContext R4B_CONTEXT = FhirContext.forR4B();
