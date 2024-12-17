@@ -18,7 +18,12 @@ subscriptionTopic.addExtension("http://hl7.org/fhir/StructureDefinition/embedded
 			new org.hl7.fhir.r4b.model.StringType(patientXml)); 
 ```
 This allows encapsulating R4 Data (Patient in this case) inside the SubscriptionTopic without violating FHIR’s data model. The idea is that SubscriptionTopic might be used in contexts where Patient resource is included as part of the subscription's metadata, so embedding it as an extension makes it possible to bundle both the SubscriptionTopic and the Patient in one resource.
-Note: the url is a placeholder, it is a unique identifier for the extension but it does not point to anything in this example 
+
+- Note:
+   - The addExtension method is adding custom data (the Patient resource) to the SubscriptionTopic as an extension.
+   - The url in this example is a placeholder, it is a unique identifier for the extension but it is not pointing to anything. 
+
+
 
 3. There is no `VersionConvertorFactory_40_43` implementation. Direct conversion between R4 (40) and R4B (43) is unavailable.
 
