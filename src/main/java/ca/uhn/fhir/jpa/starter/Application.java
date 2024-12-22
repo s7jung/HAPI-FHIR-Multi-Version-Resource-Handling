@@ -72,20 +72,20 @@ public class Application extends SpringBootServletInitializer {
 		}
 		*/
 
-	/*  2. SubscriptionWithPatientHandler
+//	/*  2. SubscriptionWithPatientHandler
 		try {
 			createR4BSubscriptionWithPatient();
 			loadAndParseXML();
 		} catch (IOException e) {
 			System.out.println("Error: " + e.getMessage());
 		}
-	 */
+//	 */
 
-//		/* 3. CustomR4BResourceHandler
+		/* 3. CustomR4BResourceHandler
 		CustomR4BResource resource = createSampleResource();
 		writeResourceToXml(resource, "custom-R4B.xml");
 		readResourceFromXml("custom-R4B.xml");
-//		*/
+		*/
 
 	}
 	@Autowired

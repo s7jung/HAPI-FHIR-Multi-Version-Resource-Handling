@@ -17,7 +17,6 @@ public class CustomR4BResourceHandler {
 		IParser xmlParser = fhirContext.newXmlParser();
 		xmlParser.setPrettyPrint(true);
 		String xmlString = xmlParser.encodeResourceToString(resource); // TODO fix: HAPI-1716: Resource class[ca.uhn.fhir.jpa.starter.util.CustomR4BResource] does not contain any valid HAPI-FHIR annotations
-		System.out.println("here11");
 		try (FileWriter writer = new FileWriter(filePath)) {
 			writer.write(xmlString);
 			System.out.println("Resource successfully written to XML file: " + filePath);

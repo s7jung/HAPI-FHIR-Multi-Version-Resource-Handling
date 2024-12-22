@@ -61,7 +61,7 @@ public class ResourceBundleHandler {
 
 		// parse R4
 		try {
-			Patient patient = (Patient) R4_CONTEXT.newXmlParser()
+			Patient patient = R4_CONTEXT.newXmlParser()
 				.parseResource(Patient.class, patientXml);
 			System.out.println("Parsed R4 Patient: " + patient.getNameFirstRep().getFamily());
 		} catch (Exception e) {

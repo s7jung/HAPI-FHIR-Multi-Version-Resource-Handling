@@ -26,23 +26,33 @@ public class SubscriptionWithPatientExtensionHandler {
 	private static final FhirContext R4B_CONTEXT = FhirContext.forR4B();
 
 	public static SubscriptionTopic createR4BSubscriptionWithPatient() throws IOException {
+		IParser r4Parser = R4_CONTEXT.newXmlParser();
+		IParser r4bParser = R4B_CONTEXT.newXmlParser().setPrettyPrint(true);
+
 		Patient r4Patient = new Patient();
 		r4Patient.setId("0403");
 		r4Patient.addName().setFamily("Doe").addGiven("John");
 		r4Patient.addExtension("https://hl7.org/fhir/r4",
 			new org.hl7.fhir.r4.model.StringType("R4"));
-		IParser r4Parser = R4_CONTEXT.newXmlParser();
 		String patientXml = r4Parser.encodeResourceToString(r4Patient);
+
+		org.hl7.fhir.r4b.model.Patient r4bPatient = new org.hl7.fhir.r4b.model.Patient();
+		r4bPatient.setId("1234");
+		r4bPatient.addName().setFamily("Gray").addGiven("Roberta");
+		r4bPatient.addExtension("https://hl7.org/fhir/r4b",
+			new org.hl7.fhir.r4b.model.StringType("R4B"));
+		String r4bPatientXml = r4bParser.encodeResourceToString(r4bPatient);
 
 		SubscriptionTopic subscriptionTopic = new SubscriptionTopic();
 		subscriptionTopic.setTitle("Sample Subscription Topic");
-		subscriptionTopic.setId(r4Patient.getIdPart()); // id type is r4.Resource
-		subscriptionTopic.addExtension("https://hl7.org/fhir/r4/embedded-patient",
-			new org.hl7.fhir.r4b.model.StringType(patientXml)); // embed an XML representation of r4Patient
 		subscriptionTopic.addExtension("https://hl7.org/fhir/r4b",
 			new org.hl7.fhir.r4b.model.StringType("R4B"));
+		subscriptionTopic.setId("0101");
+		subscriptionTopic.addExtension("https://hl7.org/fhir/r4/embedded-patient/1",
+			new org.hl7.fhir.r4b.model.StringType(patientXml)); // embed an XML representation of r4Patient
+		subscriptionTopic.addExtension("https://hl7.org/fhir/r4b/embedded-patient/1",
+			new org.hl7.fhir.r4b.model.StringType(r4bPatientXml)); // embed an XML representation of r4Patient
 
-		IParser r4bParser = R4B_CONTEXT.newXmlParser().setPrettyPrint(true);
 		String subscriptionXml = r4bParser.encodeResourceToString(subscriptionTopic);
 		Files.writeString(Paths.get("subscriptionTopic_with_patient.xml"), subscriptionXml);
 
@@ -76,7 +86,7 @@ public class SubscriptionWithPatientExtensionHandler {
 						} else if (getFHIRVersionFromXML(extension.getUrl()).equals("R4B")) {
 							String patientXml = extension.getValueAsPrimitive().getValueAsString();
 							org.hl7.fhir.r4b.model.Patient r4bpatient = R4B_CONTEXT.newXmlParser().parseResource(org.hl7.fhir.r4b.model.Patient.class, patientXml);
-							System.out.println("Parsed R4 Patient: " + r4bpatient.getNameFirstRep().getFamily());
+							System.out.println("Parsed R4B Patient: " + r4bpatient.getNameFirstRep().getFamily());
 						} else {
 							System.err.println("Unknown FHIR version: " + getFHIRVersionFromXML(extension.getUrl()));
 						}
