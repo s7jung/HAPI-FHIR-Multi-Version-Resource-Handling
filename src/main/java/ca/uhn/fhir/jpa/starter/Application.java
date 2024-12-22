@@ -7,7 +7,7 @@ import ca.uhn.fhir.jpa.starter.cdshooks.StarterCdsHooksConfig;
 import ca.uhn.fhir.jpa.starter.cr.StarterCrDstu3Config;
 import ca.uhn.fhir.jpa.starter.cr.StarterCrR4Config;
 import ca.uhn.fhir.jpa.starter.mdm.MdmConfig;
-import ca.uhn.fhir.jpa.starter.util.ResourceBundleHandler;
+import ca.uhn.fhir.jpa.starter.util.CustomR4BResource;
 import ca.uhn.fhir.jpa.subscription.channel.config.SubscriptionChannelConfig;
 import ca.uhn.fhir.jpa.subscription.match.config.SubscriptionProcessorConfig;
 import ca.uhn.fhir.jpa.subscription.match.config.WebsocketDispatcherConfig;
@@ -28,6 +28,7 @@ import org.springframework.context.annotation.Import;
 
 import java.io.IOException;
 
+import static ca.uhn.fhir.jpa.starter.util.CustomR4BResourceHandler.*;
 import static ca.uhn.fhir.jpa.starter.util.SubscriptionWithPatientExtensionHandler.createR4BSubscriptionWithPatient;
 import static ca.uhn.fhir.jpa.starter.util.SubscriptionWithPatientExtensionHandler.loadAndParseXML;
 
@@ -47,7 +48,7 @@ import static ca.uhn.fhir.jpa.starter.util.SubscriptionWithPatientExtensionHandl
 })
 public class Application extends SpringBootServletInitializer {
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws IOException {
 
 		SpringApplication.run(Application.class, args);
 
@@ -71,17 +72,22 @@ public class Application extends SpringBootServletInitializer {
 		}
 		*/
 
-//	/*  2. SubscriptionWithPatientHandler
+	/*  2. SubscriptionWithPatientHandler
 		try {
 			createR4BSubscriptionWithPatient();
 			loadAndParseXML();
 		} catch (IOException e) {
 			System.out.println("Error: " + e.getMessage());
 		}
-//	 */
+	 */
+
+//		/* 3. CustomR4BResourceHandler
+		CustomR4BResource resource = createSampleResource();
+		writeResourceToXml(resource, "custom-R4B.xml");
+		readResourceFromXml("custom-R4B.xml");
+//		*/
+
 	}
-
-
 	@Autowired
 	AutowireCapableBeanFactory beanFactory;
 
