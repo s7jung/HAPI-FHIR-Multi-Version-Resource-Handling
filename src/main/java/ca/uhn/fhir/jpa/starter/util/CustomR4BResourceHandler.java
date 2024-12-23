@@ -16,6 +16,7 @@ public class CustomR4BResourceHandler {
 	public static void writeResourceToXml(CustomR4BResource resource, String filePath) throws IOException {
 		IParser xmlParser = fhirContext.newXmlParser();
 		xmlParser.setPrettyPrint(true);
+		
 		String xmlString = xmlParser.encodeResourceToString(resource); // TODO fix: HAPI-1716: Resource class[ca.uhn.fhir.jpa.starter.util.CustomR4BResource] does not contain any valid HAPI-FHIR annotations
 		try (FileWriter writer = new FileWriter(filePath)) {
 			writer.write(xmlString);
@@ -27,7 +28,7 @@ public class CustomR4BResourceHandler {
 	public static CustomR4BResource readResourceFromXml(String filePath) throws IOException {
 		String xmlContent = new String(Files.readAllBytes(Paths.get(filePath)));
 		IParser xmlParser = fhirContext.newXmlParser();
-
+		System.out.println(xmlContent);
 		// Parse the XML and check if it's R4B-compatible
 		if (xmlContent.contains("<SubscriptionTopic") && xmlContent.contains("<Patient")) {
 			CustomR4BResource resource = (CustomR4BResource) xmlParser.parseResource(CustomR4BResource.class, xmlContent);

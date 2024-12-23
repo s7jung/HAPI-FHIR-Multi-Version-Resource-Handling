@@ -33,7 +33,7 @@ public class ResourceBundleHandler {
 		String subscriptionXml = r4bParser.encodeResourceToString(subscriptionTopic);
 		String patientXml = r4Parser.encodeResourceToString(patient);
 
-		// Serialize to XML with a container!
+		// Serialize to XML with a container
 		String combinedXml = "<Resources>\n"
 			+ r4bParser.encodeResourceToString(subscriptionTopic) + "\n"
 			+ r4Parser.encodeResourceToString(patient) + "\n"
