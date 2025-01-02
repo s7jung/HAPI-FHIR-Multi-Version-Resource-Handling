@@ -2,6 +2,7 @@ package ca.uhn.fhir.jpa.starter.util;
 import ca.uhn.fhir.context.FhirContext;
 import ca.uhn.fhir.parser.IParser;
 import org.hl7.fhir.r4.model.Patient;
+import org.hl7.fhir.r4b.model.Resource;
 import org.hl7.fhir.r4b.model.SubscriptionTopic;
 
 import java.io.FileWriter;
@@ -16,7 +17,7 @@ public class CustomR4BResourceHandler {
 	public static void writeResourceToXml(CustomR4BResource resource, String filePath) throws IOException {
 		IParser xmlParser = fhirContext.newXmlParser();
 		xmlParser.setPrettyPrint(true);
-		
+
 		String xmlString = xmlParser.encodeResourceToString(resource); // TODO fix: HAPI-1716: Resource class[ca.uhn.fhir.jpa.starter.util.CustomR4BResource] does not contain any valid HAPI-FHIR annotations
 		try (FileWriter writer = new FileWriter(filePath)) {
 			writer.write(xmlString);
@@ -54,6 +55,7 @@ public class CustomR4BResourceHandler {
 		patient.addExtension("https://hl7.org/fhir/r4",
 			new org.hl7.fhir.r4.model.StringType("R4"));
 
+		customResource.addContained(subscriptionTopic);
 		return customResource;
 	}
 }
